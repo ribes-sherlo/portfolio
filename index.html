@@ -1,27 +1,624 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="app()" :class="{'dark':dark}" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/img/Ribes_Sherlo.png" type="image/x-icon">
+<meta name="description" content="Explore the portfolio of Ribes Sherlo, Website Developer & SEO Specialist. Expert in WordPress, eCommerce websites, SEO, and digital marketing solutions.">
+<meta name="keywords" content="Website Developer">
+<meta name="author" content="Ribes Sherlo">
+<meta property="og:title" content="Ribes Sherlo - Website Developer & SEO">
+<meta property="og:description" content="Explore the portfolio of Ribes Sherlo, Website Developer & SEO Specialist. Expert in WordPress, eCommerce websites, SEO, and digital marketing solutions.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ribessherlo.online">
+<title>Ribes Sherlo - Website Developer & SEO</title>
 
-        h1 {
-            color: #333;
-            font-size: 40px;
-        }
-    </style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: { display: ['PT Sans','sans-serif'], body: ['DM Sans','sans-serif'] },
+      colors: { accent: '#2563EB', 'accent-light': '#0F172A' }
+    }
+  }
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html,body{font-family:'DM Sans',sans-serif}
+h1,h2,h3,h4,h5,h6{font-family:'PT Sans',sans-serif}
+body{transition:background-color .3s,color .3s}
+
+/* noise overlay */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")}
+
+/* scrollbar */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#2563EB;border-radius:99px}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+/* nav underline animation */
+.nl{position:relative}
+.nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;background:currentColor;transition:width .22s cubic-bezier(.4,0,.2,1)}
+.nl:hover::after,.nl.on::after{width:100%}
+.nl.on{font-weight:500}
+
+/* shimmer button */
+.shimmer{position:relative;overflow:hidden}
+.shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.18);transform:skewX(-20deg);transition:left .4s cubic-bezier(.4,0,.2,1)}
+.shimmer:hover::after{left:160%}
+
+/* photo frames */
+.pf{overflow:hidden;background:#d4d4d8}
+.pf img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* card hover */
+.card-h{transition:transform .28s cubic-bezier(.4,0,.2,1),border-color .18s}
+.card-h:hover{transform:translateY(-4px)}
+
+/* skill tag */
+.stag{transition:border-color .18s}
+
+[x-cloak]{display:none!important}
+</style>
 </head>
-<body>
-    <h1>Hii Ribes Sherlo</h1>
+
+<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased">
+
+<!-- ═══ NAV ═══ -->
+<header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+  :class="sc?'bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md shadow-sm shadow-black/5':''">
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
+
+    <a href="#hero" class="flex items-center justify-center gap-2 font-display font-bold text-xl tracking-tight relative z-10">
+    <img width="30" height="40" src="/img/Ribes_Sherlo.png" alt="">
+    <span class="text-zinc-900 dark:text-white">Ribes</span>
+    <span class="text-accent">Sherlo</span>
+    </a>
+
+    <ul class="hidden md:flex items-center gap-8 text-sm" role="list">
+      <li><a href="#my-work" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='services'?'on !text-zinc-900 dark:!text-white':''">My Work</a></li>
+      <li><a href="#experience"     class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='work'?'on !text-zinc-900 dark:!text-white':''">Experience</a></li>
+      <li><a href="#about"   class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">About</a></li>
+      <li><a href="#contact" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">Contact</a></li>
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <!-- dark toggle -->
+      <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors" :aria-label="dark?'Light mode':'Dark mode'">
+        <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg x-show="dark"  class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+      </button>
+      <!-- hire me -->
+      <a href="#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
+        Contact Me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+      <!-- hamburger -->
+      <button @click="mm=!mm" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800" :aria-expanded="mm" aria-label="Toggle menu">
+        <svg x-show="!mm" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mm"  class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- mobile menu -->
+  <div x-show="mm" x-cloak
+    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
+    class="md:hidden bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900">
+    <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium" role="list">
+      <li><a href="#my-work" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">My Work</a></li>
+      <li><a href="#experience"  @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Experience</a></li>
+      <li><a href="#about"   @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
+      <li><a href="#contact" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
+      <li class="pt-2 border-t border-zinc-100 dark:border-zinc-900">
+        <a href="#contact" @click="mm=false" class="inline-flex shimmer bg-accent text-white font-medium text-sm px-5 py-2.5 rounded-full">Hire me →</a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══ HERO ═══ -->
+
+<section id="hero" class="relative min-h-screen flex items-center pt-16 overflow-hidden">
+  <div class="absolute top-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute bottom-1/4 left-0 w-64 h-64 bg-zinc-200/50 dark:bg-zinc-800/30 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-6 py-24 w-full">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+
+  <!-- TEXT -->
+  <div>
+    <p class="reveal text-sm font-medium text-accent tracking-widest uppercase mb-4">
+     Open to full-time opportunities in the UAE
+    </p>
+
+    <h1 class="reveal d1 font-display font-bold text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-zinc-900 dark:text-white mb-6">
+      Hi, I'm <span class="text-accent">Ribes Sherlo</span>
+    </h1>
+
+    <p class="reveal d2 text-lg md:text-xl text-zinc-500 dark:text-zinc-400 font-light leading-relaxed max-w-md mb-10">
+      I am a Website Developer and SEO Specialist. I build clean, fast, and responsive websites that help businesses grow online and bring real customers.
+    </p>
+
+    <div class="reveal d3 flex flex-wrap gap-4">
+      <a href="#my-work" class="shimmer inline-flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium px-7 py-3.5 rounded-full hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors text-sm">
+        View My Work
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </a>
+
+      <a href="#contact" class="inline-flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-medium px-7 py-3.5 rounded-full hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors text-sm">
+        Get In Touch
+      </a>
+    </div>
+
+    <!-- STATS -->
+    <div class="reveal d4 flex gap-8 mt-14 pt-8 border-t border-zinc-100 dark:border-zinc-900">
+
+      <div>
+        <p class="font-display font-bold text-3xl text-zinc-900 dark:text-white">12+</p>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Projects Completed</p>
+      </div>
+
+      <div>
+        <p class="font-display font-bold text-3xl text-zinc-900 dark:text-white">3</p>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Years Experience</p>
+      </div>
+
+      <div>
+        <p class="font-display font-bold text-3xl text-zinc-900 dark:text-white">2y</p>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">GCC Experience</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- IMAGE -->
+  <div class="reveal d2 flex justify-center md:justify-end">
+    <div class="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
+      <div class="pf w-full h-full rounded-3xl overflow-hidden">
+        <img src="/img/Ribes-sherlo-img.png" alt="Ribes Sherlo - Website Developer & SEO Specialist" loading="eager">
+      </div>
+
+      <div class="absolute -bottom-4 -left-4 bg-accent text-white font-display font-bold text-sm px-4 py-2.5 rounded-2xl shadow-lg tracking-widest">
+        Immediate Joiner
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  </div>
+</section>
+
+
+
+<!-- ═══ SERVICES ═══ -->
+<section id="my-work" class="py-24 bg-zinc-50 dark:bg-zinc-900/40">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-14">
+      <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">What I do</p>
+      <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">My Work</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+
+<article class="reveal d1 card-h group bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+  <div class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-zinc-800 rounded-xl mb-6 group-hover:bg-accent/10 transition-colors">
+    <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2"/>
+    </svg>
+  </div>
+  <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-3">Website Development</h3>
+  <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+    Modern, responsive websites built with clean structure and smooth performance. Focused on real business goals and user experience.
+  </p>
+</article>
+
+<article class="reveal d2 card-h group bg-zinc-900 dark:bg-zinc-800 rounded-2xl p-8 border border-zinc-800 hover:border-accent">
+  <div class="w-12 h-12 flex items-center justify-center bg-zinc-800 dark:bg-zinc-700 rounded-xl mb-6 group-hover:bg-accent/20 transition-colors">
+    <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+    </svg>
+  </div>
+  <h3 class="font-display font-bold text-xl text-white mb-3">Website Maintenance</h3>
+  <p class="text-sm text-zinc-400 leading-relaxed">
+    Regular updates, fixes, and improvements to keep your website fast, secure, and running without issues.
+  </p>
+</article>
+
+<article class="reveal d3 card-h group bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+  <div class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-zinc-800 rounded-xl mb-6 group-hover:bg-accent/10 transition-colors">
+    <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9 9 0 1021 12H11V3.055z"/>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12h-9V3.055"/>
+    </svg>
+  </div>
+  <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-3">SEO Optimization</h3>
+  <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+    On-page SEO, keyword setup, and content improvements to help websites rank better and reach the right audience.
+  </p>
+</article>
+
+<article class="reveal d1 card-h group bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+  <div class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-zinc-800 rounded-xl mb-6 group-hover:bg-accent/10 transition-colors">
+    <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 12h14M5 16h14"/>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8v8M17 8v8"/>
+    </svg>
+  </div>
+  <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-3">Hosting & Domain Setup</h3>
+  <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+    Domain connection, hosting setup, and server configuration to keep websites stable, secure, and always accessible.
+  </p>
+</article>
+
+<article class="reveal d2 card-h group bg-zinc-900 dark:bg-zinc-800 rounded-2xl p-8 border border-zinc-800 hover:border-accent">
+  <div class="w-12 h-12 flex items-center justify-center bg-zinc-800 dark:bg-zinc-700 rounded-xl mb-6 group-hover:bg-accent/20 transition-colors">
+    <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h6m-6 4h10"/>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5h14v14H5z"/>
+    </svg>
+  </div>
+  <h3 class="font-display font-bold text-xl text-white mb-3">Social Media Management</h3>
+  <p class="text-sm text-zinc-400 leading-relaxed">
+    Content planning, post design, and page handling to keep social media active and consistent.
+  </p>
+</article>
+
+<article class="reveal d3 card-h group bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+  <div class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-zinc-800 rounded-xl mb-6 group-hover:bg-accent/10 transition-colors">
+    <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17l4-6 4 4 4-6 4 8"/>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 20h16"/>
+    </svg>
+  </div>
+  <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-3">Poster Design</h3>
+  <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+    Clean and simple poster designs for marketing, promotions, and online branding with strong visual clarity.
+  </p>
+</article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WORK ═══ -->
+<section id="experience" class="py-24">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
+      <div>
+        <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Portfolio</p>
+        <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Selected work</h2>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+<article class="card-h reveal d1 group rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-accent md:row-span-2">
+  <div class="p-7">
+
+    <div class="flex flex-wrap gap-2 mb-4">
+      <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">WordPress</span>
+      <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Elementor</span>
+      <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">WooCommerce</span>
+      <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Bricks Builder</span>
+      <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">PHP</span>
+      <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">SEO</span>
+      <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Google Analytics</span>
+      <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Search Console</span>
+    </div>
+
+    <h3 class="font-display font-bold text-2xl text-zinc-900 dark:text-white mb-3">
+      Website Developer & SEO — MTS Yacht Rental
+    </h3>
+
+    <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-2 list-disc pl-5">
+      <li>Built and maintained fast, mobile-friendly yacht rental websites with strong performance and clean UI.</li>
+      <li>Handled complete website management including updates, fixes, and ongoing improvements.</li>
+      <li>Integrated API-based payment systems for smooth and secure online transactions.</li>
+      <li>Set up SMTP email systems for reliable booking confirmations and customer communication.</li>
+      <li>Developed automation for blog posting and content updates to save time and improve consistency.</li>
+      <li>Managed social media pages and connected website content with marketing channels.</li>
+      <li>Improved SEO with keyword planning, backlinks, and technical optimization.</li>
+      <li>Configured hosting, domains, DNS, and SSL across platforms like Hostinger and Cloud services.</li>
+      <li>Set up Google Analytics and Search Console for tracking traffic and performance insights.</li>
+    </ul>
+
+  </div>
+</article>
+
+      <article class="card-h reveal d2 group rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+        <div class="p-6">
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Wordpress</span>
+            <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">WooCommerce</span>
+            <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Bricks Builder</span>
+          </div>
+            <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-1.5">Website Developer - Elite Businessman Solutions</h3>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">
+            <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-2 list-disc pl-5">
+              <li>Developed a WordPress website using Bricks Builder.</li>
+              <li>Configured hosting and purchased domain for the website.</li>
+              <li>Implemented responsive design for desktop and mobile.</li>
+              <li>Ensured website functionality and performance optimization.</li>
+            </ul>
+          </p>
+        </div>
+      </article>
+
+      <article class="card-h reveal d3 group rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+        <div class="p-6">
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Zoho Inventory Management</span>
+            <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Zoho POS</span>
+            <span class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Zoho Api Integration</span>
+          </div>
+            <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-1.5">Inventory Management - Tamilkadai General Trading</h3>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">
+            <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-2 list-disc pl-5">
+              <li>Managed inventory operations using Zoho Inventory and Zoho POS including item creation, stock updates, purchase management, sales tracking, and inventory monitoring.</li>
+              <li>Handled product variants, stock adjustments, returns processing, invoice management, and warehouse-related inventory activities to maintain accurate stock records.</li>
+              <li>Integrated Zoho Inventory APIs to sync items, customer details, orders, and inventory data between systems and internal platforms.</li>
+              <li>Monitored daily inventory flow, resolved stock mismatches, managed order updates, and supported smooth POS and inventory operations.</li>
+              <li>Worked with multi-product inventory management, return workflows, barcode-based item handling, and system troubleshooting to improve operational efficiency.</li>
+            </ul>
+          </p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about" class="py-24 bg-zinc-50 dark:bg-zinc-900/40">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+
+      <div class="reveal order-2 md:order-1">
+        <div class="pf w-full aspect-square max-w-sm mx-auto rounded-3xl">
+          <img src="/img/Ribes-sherlo-img.png" alt="Ribes Sherlo" loading="lazy">
+        </div>
+      </div>
+
+      <div class="order-1 md:order-2">
+        <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">About me</p>
+
+        <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white leading-tight mb-6">
+         <br>Who I am
+        </h2>
+
+        <p class="reveal d2 text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">
+          I’m Ribes Sherlo, a website developer and SEO specialist based in UAE. 
+          I build simple, clean, and fast websites that help businesses grow online.
+        </p>
+
+        <p class="reveal d3 text-zinc-500 dark:text-zinc-400 leading-relaxed mb-8">
+          I work with small businesses, personal brands, and startups to create websites that look good and perform well.
+          My focus is always on speed, structure, and user-friendly design.
+        </p>
+
+        <div class="reveal d4">
+          <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-3">
+            Skills & tools
+          </p>
+
+<div class="flex flex-wrap gap-2" role="list" aria-label="Skills">
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">WordPress</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">WooCommerce</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">Elementor</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">Bricks Builder</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">Ecommerce</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">React JS</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">Next JS</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">PHP</span>
+    <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">HTML</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">CSS</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">JavaScript</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">Canva</span>
+  <span role="listitem" class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-accent">Zoho Inventory</span>
+</div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" class="py-24">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="bg-zinc-900 dark:bg-zinc-800 rounded-3xl p-10 md:p-16 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute bottom-0 left-0 w-40 h-40 bg-accent/10 rounded-full blur-2xl pointer-events-none" aria-hidden="true"></div>
+
+      <div class="relative z-10 grid md:grid-cols-2 gap-12 items-start">
+
+        <div>
+          <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">
+  Get in touch
+</p>
+
+<h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-white leading-tight mb-5">
+  Let’s build something that works
+</h2>
+
+<p class="reveal d2 text-zinc-400 leading-relaxed mb-8">
+  I help businesses build and manage their online presence from start to finish.  
+  From domain setup and website development to SEO and long-term maintenance, I handle the full process in a simple and practical way.  
+  The goal is always clear — a website that looks good, loads fast, and brings real results.
+</p>
+          <div class="reveal d3 flex flex-col gap-4">
+            <a href="tel:+971547978784" class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+  <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
+    
+    <!-- Phone Icon -->
+    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.2.48 2.5.74 3.82.74a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.32.26 2.62.74 3.82a1 1 0 01-.27 1.11l-2.35 2.86z"/>
+    </svg>
+
+  </span>
+  <span class="text-sm">+971 54 797 8784</span>
+</a>
+            <a href="mailto:ribessherloo@gmail.com" class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+              <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </span>
+              <span class="text-sm">ribessherloo@gmail.com</span>
+            </a>
+            <a href="https://linkedin.com/in/ribes-sherlo" rel="noopener noreferrer" target="_blank" class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+              <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+              </span>
+              <span class="text-sm">linkedin.com/in/ribes-sherlo</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="reveal d2">
+<form id="contactForm" novalidate>
+  <div class="flex flex-col gap-4">
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-medium text-zinc-400 mb-1.5">Name *</label>
+        <input type="text" id="fname" name="name" required
+          class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3">
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-zinc-400 mb-1.5">Email *</label>
+        <input type="email" id="femail" name="email" required
+          class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3">
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-zinc-400 mb-1.5">Subject</label>
+      <input type="text" id="fsubject" name="subject"
+        class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3">
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-zinc-400 mb-1.5">Message *</label>
+      <textarea id="fmessage" name="message" rows="4"
+        class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3"></textarea>
+    </div>
+
+    <button type="submit"
+      class="w-full bg-accent text-white font-bold text-sm py-3.5 rounded-xl">
+      Send message →
+    </button>
+
+  </div>
+</form>
+
+<script>
+document.getElementById("contactForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("fname").value;
+  const email = document.getElementById("femail").value;
+  const subject = document.getElementById("fsubject").value;
+  const message = document.getElementById("fmessage").value;
+
+  const phoneNumber = "971547978784";
+
+  const whatsappMessage =
+    `New Contact Form:\n\n` +
+    `Name: ${name}\n` +
+    `Email: ${email}\n` +
+    `Subject: ${subject}\n` +
+    `Message: ${message}`;
+
+  const url =
+    `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+  window.open(url, "_blank");
+});
+</script>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="border-t border-zinc-100 dark:border-zinc-900">
+  <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p class="text-sm text-zinc-400">© <span id="yr"></span> Ribes Sherlo. All rights reserved. <br> Developed by <a href="" target="_blank" class="font-bold">Ribes Sherlo</a></p>
+    <p class="text-xs text-zinc-500">Thank You
+    </p>
+  </div>
+</footer>
+
+<script>
+function app() {
+  return {
+    dark: false,
+    mm: false,
+    sc: false,
+    s: 'hero',
+
+    init() {
+      // dark mode
+      this.dark = localStorage.getItem('theme') === 'dark' ||
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      this.$watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light'));
+
+      // scroll
+      window.addEventListener('scroll', () => {
+        this.sc = window.scrollY > 20;
+        this.updateSection();
+      }, { passive: true });
+
+      // reveal
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+      // year
+      document.getElementById('yr').textContent = new Date().getFullYear();
+    },
+
+    updateSection() {
+      const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 60;
+      if (atBottom) { this.s = 'contact'; return; }
+      const ids = ['contact','blog','reviews','about','work','services','hero'];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 130) { this.s = id; return; }
+      }
+    }
+  }
+}
+</script>
+<script>
+  if (location.pathname === "/index.html") {
+    window.location.replace("/");
+  }
+</script>
+
 </body>
 </html>
