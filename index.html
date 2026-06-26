@@ -615,9 +615,29 @@ function app() {
 }
 </script>
 <script>
-  if (location.pathname === "/index.html") {
-    window.location.replace("/");
+(function () {
+  // Remove www
+  if (location.hostname.startsWith("www.")) {
+    location.replace(
+      location.protocol + "//" +
+      location.hostname.substring(4) +
+      location.pathname +
+      location.search +
+      location.hash
+    );
+    return;
   }
+
+  // Remove index.html
+  if (location.pathname === "/index.html") {
+    location.replace(
+      location.origin +
+      "/" +
+      location.search +
+      location.hash
+    );
+  }
+})();
 </script>
 
 </body>
